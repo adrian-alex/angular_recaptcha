@@ -8,15 +8,13 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:angular/angular.dart';
-import 'package:angular/core.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:dart_browser_loader/dart_browser_loader.dart' show loadScript;
 import 'package:dart_browser_loader/src/utils.dart' show waitLoad;
 import 'package:js/js.dart';
 
 @JS('grecaptcha.render')
-external num _render(
-    HtmlElement container, AngularRecaptchaParameters parameters);
+external num _render(HtmlElement container, AngularRecaptchaParameters parameters);
 
 @JS('grecaptcha.reset')
 external void _reset(num id);
@@ -40,13 +38,7 @@ class AngularRecaptchaParameters {
   external Function get expiredCallback;
 
   external factory AngularRecaptchaParameters(
-      {String sitekey,
-      String theme,
-      Function callback,
-      String type,
-      Function expiredCallback,
-      String size,
-      String tabindex});
+      {String sitekey, String theme, Function callback, String type, Function expiredCallback, String size, String tabindex});
 }
 
 @Component(
@@ -54,8 +46,7 @@ class AngularRecaptchaParameters {
   styleUrls: ['angular_recaptcha.css'],
   template: '',
 )
-class AngularRecaptcha extends ValueAccessor
-    implements AfterViewInit, OnDestroy {
+class AngularRecaptcha extends ValueAccessor implements AfterViewInit, OnDestroy {
   final _onExpireCtrl = StreamController<Null>();
   final NgModel _ngModel;
   final HtmlElement _ref;
