@@ -38,7 +38,13 @@ class AngularRecaptchaParameters {
   external Function get expiredCallback;
 
   external factory AngularRecaptchaParameters(
-      {String sitekey, String theme, Function callback, String type, Function expiredCallback, String size, String tabindex});
+      {String sitekey,
+      String theme,
+      Function callback,
+      String type,
+      Function expiredCallback,
+      String size,
+      String tabindex});
 }
 
 @Component(
@@ -105,24 +111,30 @@ class AngularRecaptcha extends ValueAccessor implements AfterViewInit, OnDestroy
 
   Future<num> render() async {
     _id = await _safeApiCall<num>(
-      () => _render(
-        _ref,
-        AngularRecaptchaParameters(
-          sitekey: key,
-          theme: theme,
-          callback: allowInterop(_callbackResponse),
-          expiredCallback: allowInterop(_expireCallback),
-          type: type,
-          size: size,
-          tabindex: tabindex,
-        ),
-      ),
+      () {
+        var renderRes = _render(
+          _ref,
+          AngularRecaptchaParameters(
+            sitekey: key,
+            theme: theme,
+            callback: allowInterop(_callbackResponse),
+            expiredCallback: allowInterop(_expireCallback),
+            type: type,
+            size: size,
+            tabindex: tabindex,
+          ),
+        );
+        return Future.value(renderRes);
+      },
     );
     return _id;
   }
 
   void reset() {
-    _safeApiCall(() => _reset(id));
+    _safeApiCall(() {
+      _reset(id);
+      return;
+    });
   }
 
   @override
@@ -177,11 +189,11 @@ abstract class ValueAccessor<T> implements ControlValueAccessor<T> {
   }
 }
 
-typedef _VoidCallback<T> = FutureOr<T> Function();
+typedef _VoidCallback<T> = Future<T> Function();
 
 Element _script;
 
-FutureOr<T> _safeApiCall<T>(_VoidCallback<T> call) async {
+Future<T> _safeApiCall<T>(_VoidCallback<T> call) async {
   await loadScript(
     'https://www.google.com/recaptcha/api.js?render=explicit',
     isAsync: true,
